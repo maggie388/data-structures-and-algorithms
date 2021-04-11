@@ -1,0 +1,2 @@
+## Learning Data Structures
+Examples of Javascript implementations of common data structures. This repo contains code from exercises I completed in the Codecademy course: "Pass The Technical Interview with JavaScript".
