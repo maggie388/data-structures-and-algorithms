@@ -24,7 +24,7 @@ class MinHeap {
         let parentIndex = getParent(currentIndex);
         // traversing the heap from the bottom to top
         // swap parent and child if the child value is less than the parent value;
-        while (currentIndex > 1 && this.heap[current] < this.heap[parentIndex]) {
+        while (currentIndex > 1 && this.heap[currentIndex] < this.heap[parentIndex]) {
             this.swap(currentIndex, parentIndex);
             // update the currentIndex to coninue moving up the tree
             currentIndex = parentIndex;
@@ -77,8 +77,7 @@ class MinHeap {
         }
     }
 
-    // helper methods
-
+    // HELPER METHODS
     exists(index) {
         return index <= this.size;
     }
