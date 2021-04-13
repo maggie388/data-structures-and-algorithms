@@ -10,7 +10,7 @@ class Node {
         if (node instanceof Node || node === null) {
             this.next = node;
         } else {
-            throw new Error(`Next node must be a memeber of the node class`);
+            throw new Error(`Next node must be a member of the Node class`);
         }
     }
 
@@ -93,6 +93,8 @@ class LinkedList {
     } 
 
 }
+
+module.exports = LinkedList;
 
 // other methods to build out:
 //   -- insert new node after a given node
