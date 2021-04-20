@@ -21,10 +21,13 @@
 
 const mergeSort = (startArray) => {
     const length = startArray.length;
+
+    // base case for recursive function
     if (length === 1) {
         return startArray;
     }
 
+    // recursive case
     const mid = Math.floor(length / 2);
     const leftArray = startArray.slice(0, mid);
     const rightArray = startArray.slice(mid, length);
@@ -36,14 +39,13 @@ const merge = (leftArray, rightArray) => {
     const sortedArray = [];
     while (leftArray.length > 0 && rightArray.length > 0) {
         if (leftArray[0] < rightArray[0]) {
-            sortedArray.push(leftArray[0]);
-            leftArray.shift();
+            sortedArray.push(leftArray.shift());
         } else {
-            sortedArray.push(rightArray[0]);
-            rightArray.shift();
+            sortedArray.push(rightArray.shift());
         }
     }
-
+    // either leftArray or rightArray will still have elements in it after the while loop 
+    // concat will add them to the end of the sorted array
     return sortedArray.concat(leftArray).concat(rightArray);
 }
 
