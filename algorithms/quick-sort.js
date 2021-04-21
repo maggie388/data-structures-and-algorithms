@@ -29,6 +29,8 @@ const swap = (arr, indexOne, indexTwo) => {
 // for the left and right bound that will be used on that initial call
 // those values will always be 0 and the last index of the array
 const quicksort = (array, leftBound = 0, rightBound = array.length - 1) => {
+    // another way to put this is if array.length > 1
+    // if there is only one element in the array the right and left bound will be equal
     if (leftBound < rightBound) {
         const pivotIndex = partition(array, leftBound, rightBound);
         quicksort(array, leftBound, pivotIndex - 1);
