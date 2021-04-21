@@ -1,4 +1,4 @@
-const LinkedList = require('./linked-list');
+const LinkedList = require('./singly-linked-list');
 
 class Queue {
     // if no value is passed in max value will be infinity by default
@@ -37,3 +37,5 @@ class Queue {
         }
     }
 }
+
+module.exports = Queue;

@@ -25,11 +25,7 @@
         O(vertices + edges);    
 */
 
-
-/*
-    Three classes are needed for a Graph. 
-    To make the Graph class versitale it should be able to be both directed or not, and weighted or not
-*/
+const Queue = require('./queue');
 
 class Edge {
     constructor(start, end, weight = null) {
@@ -110,51 +106,67 @@ class Graph {
         }
     }
 
+    // implementation with recurions instead of a stack - ** try a stack implementation **
+    // the recursion acts as a stack, popping off the last vertex when it reaches the end of a path
+    // this methid only traverses, the callback is for adding some other functionality
+    depthFirstTraversal(callback, start = this.vertices[0], visitedVertices = [start]) {
+        callback(start);
+        start.edges.forEach((edge) => {
+            const neighbour = edge.end;
+            if (!visitedVertices.includes(neighbour)) {
+                // the visitedVertices list ensures we don't enter an infinate loop 
+                // when the traversal encounters a cycle or it's neighbour has already been visited
+                visitedVertices.push(neighbour);
+                this.depthFirstTraversal(callback, neighbour, visitedVertices);
+            }
+        });
+    }
+
+
+    // implementation with a queue
+    breathFirstTraversal(callback, start = this.vertices[0]) {
+        const visitedVertices = [start];
+        const visitQueue = new Queue();
+        visitQueue.enqueue(start);
+        while (!visitQueue.isEmpty()) {
+            const current = visitQueue.dequeue();
+            callback(current);
+            current.edges.forEach((edge) => {
+                const neighbour = edge.end;
+                if (!visitedVertices.includes(neighbour)) {
+                    visitedVertices.push(neighbour);
+                    visitQueue.enqueue(neighbour);
+                }
+            })
+        }
+    }
+
     print() {
         this.vertices.forEach(vertex => vertex.print());
     }
 }
 
+const myGraph = new Graph();
 
-// implementation of depth-first traversal with recursion
-// this function just traverses the graph and logs each value in order
-// by adding a call back parameter for the user they can use this function to so something else as they traverse the graph
-const depthFirstTraversal = (start, callback, visitedVertices = [start]) => {
-    callback(start);
-    start.edges.forEach((edge) => {
-      const neighbor = edge.end;
-      if (!visitedVertices.includes(neighbor)) {
-        // maintining the visitedVertices list ensure we don't enter an infinate loop 
-        // when the traversal encounters a cycle or it's neighbour has already been visited
-        visitedVertices.push(neighbor);
-        depthFirstTraversal(neighbor, callback, visitedVertices);
-      }
-    });
-  };
+const a = myGraph.addVertex('a');
+const b = myGraph.addVertex('b');
+const c = myGraph.addVertex('c');
+const d = myGraph.addVertex('d');
 
+myGraph.addEdge(a, b);
+myGraph.addEdge(a, c);
+myGraph.addEdge(a, d);
+myGraph.addEdge(b, c);
+myGraph.addEdge(b, d);
+myGraph.addEdge(c, d);
 
-// implementation of a breath-first traersal with a queue
-// this function just traverses the graph and logs each value in order
-// challenges: come up with a recursive solution, add a callback
-const Queue = require('../data-structures/queue');
+// myGraph.print()
 
-const breadthFirstTraversal = (start) => {
-    const visitedVertices = [start];
-    // the visitedQueue keeps track of the order vertices are visited by layers
-    const visitQueue = new Queue();
-    visitQueue.enqueue(start);
-    while (!visitQueue.isEmpty()) {
-        const current = visitQueue.dequeue();
-        console.log(current.data);
-        current.edges.forEach((edge) => {
-            const neighbor = edge.end;
+// // print the data as you traverse the graph
+// myGraph.depthFirstTraversal((vertex) => console.log(`The current value is ${vertex.data}`));
+// myGraph.breathFirstTraversal((vertex) => console.log(`The current value is ${vertex.data}`));
 
-            if (!visitedVertices.includes(neighbor)) {
-                visitedVertices.push(neighbor);
-                visitQueue.enqueue(neighbor);
-            }
-        });
-    }
-};
+// // print the data as you traverse starting from vertex c
+// myGraph.depthFirstTraversal((vertex) => console.log(`The current value is ${vertex.data}`), c);
+// myGraph.breathFirstTraversal((vertex) => console.log(`The current value is ${vertex.data}`), c);
 
-// challenge: make these functions methods for the graph class
