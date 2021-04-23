@@ -31,6 +31,8 @@
 const Queue = require('./queue');
 const PriorityQueue = require('./priority-queue');
 
+
+
 class Edge {
     // setting the default weight to 1 instead of null so we can still use
     // dijkstra's algo to find the shortest path for an unweighted graph
@@ -158,6 +160,8 @@ class Graph {
         // and we want to initiate the value of all the keys in previous to null
         const distances = {};
         const previous = {};
+        // using a PriorityQueue instead of a regular Queue just helps to reduce teh number of reevaluations that need to be done
+        // it would also work with w regular Queue but it is less efficent. 
         const queue = new PriorityQueue();
 
         queue.add({ vertex: startingVertex, priority: 0 });
