@@ -11,24 +11,31 @@
     -- adjacency matrix: Graph representation where vertices are both the rows and the columns. Each cell represents a possible edge.
     -- adjacency list: Graph representation where each vertex has a list of all the vertices it shares an edge with.
 
-    ### METHODS FOR TRAVERSING A GRAPH
+    ### METHODS FOR TRAVERSING
     -- depth-first search (DFS)
         helpful for detecting if a path exists between two vertices
         can use a stack or recursion to keep track of vertices
     -- breath-first search (BFS)
         helpful for finding the shortest path between two vertices
         uses a queue to keep track of vertices
-    -- Dijkstra’s algorithm 
+    -- Dijkstra’s algorithm (pronounced die-k-stra)
         used for finding the shortest distance from a given point to every other point in a weighted graph
+        use a min-heap to keep track of all the distances
+        the runtime of is O((E+V)log V) (traversal plus maintaining the min-heap)
+        does not work with negative edge weights
 
-    ### RUNTIME
+    ### RUNTIME OF TRAVERSAL
         O(vertices + edges);    
 */
 
 const Queue = require('./queue');
+const { PriorityQueue } = require('./min-heap');
 
 class Edge {
-    constructor(start, end, weight = null) {
+    // setting the default weight to 1 instead of null so we can still use
+    // dijkstra's algo to find the shortest path for an unweighted graph
+    // also make a change to the addEdge method
+    constructor(start, end, weight = 1) {
         this.start = start;
         this.end = end;
         this.weight = weight;
@@ -81,7 +88,7 @@ class Graph {
     }
 
     addEdge(vertexOne, vertexTwo, weight) {
-        const edgeWeight = this.isWeighted ? weight : null;
+        const edgeWeight = this.isWeighted ? weight : 1;
 
         if (vertexOne instanceof Vertex && vertexTwo instanceof Vertex) {
             vertexOne.addEdge(vertexTwo, edgeWeight);
@@ -106,6 +113,10 @@ class Graph {
         }
     }
 
+    getVertexByValue(value) {
+        return this.vertices.find(vertex => vertex.data === value);
+    }
+
     // implementation with recurions instead of a stack - ** try a stack implementation **
     // the recursion acts as a stack, popping off the last vertex when it reaches the end of a path
     // this methid only traverses, the callback is for adding some other functionality
@@ -121,7 +132,6 @@ class Graph {
             }
         });
     }
-
 
     // implementation with a queue
     breathFirstTraversal(callback, start = this.vertices[0]) {
@@ -141,24 +151,59 @@ class Graph {
         }
     }
 
+    
+    dijkstras(startingVertex = this.vertices[0]) {
+        // this is the set up, every vertex's data will be a key in the distances and previous objects
+        // we want to initiate the value of all the keys in distance to Infinity (except the startingVertex)
+        // and we want to initiate the value of all the keys in previous to null
+        const distances = {};
+        const previous = {};
+        const queue = new PriorityQueue();
+
+        queue.add({ vertex: startingVertex, priority: 0 });
+
+        this.vertices.forEach((vertex) => {
+            distances[vertex.data] = Infinity;
+            previous[vertex.data] = null;
+        })
+
+        distances[startingVertex.data] = 0;
+
+        // now we start to iterate through the queue as a breath first search
+        while (!queue.isEmpty()) {
+            const { vertex } = queue.popMin();
+
+            vertex.edges.forEach((edge) => {
+                const alternate = edge.weight + distances[vertex.data];
+                const neighbourValue = edge.end.data;
+
+                if (alternate < distances[neighbourValue]) {
+                    distances[neighbourValue] = alternate;
+                    previous[neighbourValue] = vertex;
+
+                    queue.add({ vertex: edge.end, priority: distances[neighbourValue] });
+                }
+            })
+        }
+        return { distances, previous };
+    }
+
     print() {
         this.vertices.forEach(vertex => vertex.print());
     }
 }
 
-const myGraph = new Graph();
+const myGraph = new Graph(true);
 
 const a = myGraph.addVertex('a');
 const b = myGraph.addVertex('b');
 const c = myGraph.addVertex('c');
 const d = myGraph.addVertex('d');
 
-myGraph.addEdge(a, b);
-myGraph.addEdge(a, c);
-myGraph.addEdge(a, d);
-myGraph.addEdge(b, c);
-myGraph.addEdge(b, d);
-myGraph.addEdge(c, d);
+myGraph.addEdge(a, b, 1);
+myGraph.addEdge(a, d, 7);
+myGraph.addEdge(b, c, 3);
+myGraph.addEdge(c, d, 4);
 
 // myGraph.print()
 
@@ -170,3 +215,4 @@ myGraph.addEdge(c, d);
 // myGraph.depthFirstTraversal((vertex) => console.log(`The current value is ${vertex.data}`), c);
 // myGraph.breathFirstTraversal((vertex) => console.log(`The current value is ${vertex.data}`), c);
 
+console.log(myGraph.dijkstras());

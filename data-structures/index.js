@@ -1,4 +1,4 @@
-const MinHeap = require('./min-heap');
+const { MinHeap } = require('./min-heap');
 const MaxHeap = require('./max-heap');
 
 // const myMinHeap = new MinHeap();
