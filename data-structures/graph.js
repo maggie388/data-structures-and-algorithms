@@ -34,7 +34,7 @@ const PriorityQueue = require('./priority-queue');
 class Edge {
     // setting the default weight to 1 instead of null so we can still use
     // dijkstra's algo to find the shortest path for an unweighted graph
-    // also make a change to the addEdge method
+    // also made a change to the addEdge method
     constructor(start, end, weight = 1) {
         this.start = start;
         this.end = end;
@@ -151,10 +151,10 @@ class Graph {
         }
     }
 
-    
+    // this finds the shortace distance from one vertext to all other vertexes in the graph
     dijkstras(startingVertex = this.vertices[0]) {
         // this is the set up, every vertex's data will be a key in the distances and previous objects
-        // we want to initiate the value of all the keys in distance to Infinity (except the startingVertex)
+        // we want to initiate the value of all the keys in distance to Infinity (except the startingVertex, it should be 0)
         // and we want to initiate the value of all the keys in previous to null
         const distances = {};
         const previous = {};
@@ -169,9 +169,9 @@ class Graph {
 
         distances[startingVertex.data] = 0;
 
-        // now we start to iterate through the queue as a breath first search
+        // now we start to iterate through the queue breath first
         while (!queue.isEmpty()) {
-            const { vertex } = queue.popMin();
+            const { vertex } = queue.popFirst();
 
             vertex.edges.forEach((edge) => {
                 const alternate = edge.weight + distances[vertex.data];
@@ -188,10 +188,23 @@ class Graph {
         return { distances, previous };
     }
 
+    shortestPathBetween(startingVertex, targetVertex) {
+        const { distances, previous } = this.dijkstras(startingVertex);
+        const distance = distances[targetVertex.data];
+        let path = []
+        let vertex = targetVertex;
+        while (vertex) {
+            path.unshift(vertex);
+            vertex = previous[vertex.data];
+        }
+        return { distance, path };
+    }
+
     print() {
         this.vertices.forEach(vertex => vertex.print());
     }
 }
+
 
 const myGraph = new Graph(true);
 
@@ -216,3 +229,4 @@ myGraph.addEdge(c, d, 4);
 // myGraph.breathFirstTraversal((vertex) => console.log(`The current value is ${vertex.data}`), c);
 
 console.log(myGraph.dijkstras());
+console.log(myGraph.shortestPathBetween(a, d))

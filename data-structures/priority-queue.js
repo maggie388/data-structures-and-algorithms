@@ -1,4 +1,5 @@
 const MinHeap = require('./min-heap');
+const { getParent, getLeft, getRight } = require('./heap-helpers')
 
 // created for use in the graph class in dijkstra's algorithm
 class PriorityQueue extends MinHeap {
