@@ -29,7 +29,7 @@
 */
 
 const Queue = require('./queue');
-const { PriorityQueue } = require('./min-heap');
+const PriorityQueue = require('./priority-queue');
 
 class Edge {
     // setting the default weight to 1 instead of null so we can still use

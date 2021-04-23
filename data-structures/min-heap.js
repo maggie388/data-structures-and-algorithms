@@ -40,9 +40,9 @@ class MinHeap extends Heap {
                     // update the current index to continue moving down the tree
                     currentIndex = rightChildIndex;
                 }
-            // if it only has one child, we always swap with the left child
-            // in a heap a parent node should always be assigned a left child before being assigned a right child
-            // so if there is only one child it will always be on the left. 
+                // if it only has one child, we always swap with the left child
+                // in a heap a parent node should always be assigned a left child before being assigned a right child
+                // so if there is only one child it will always be on the left. 
             } else {
                 this.swap(currentIndex, leftChildIndex);
                 // update the current index to continue moving down the tree
@@ -58,8 +58,8 @@ class MinHeap extends Heap {
     canSwap(currentIndex, leftChildIndex, rightChildIndex) {
         // Check that one of the possible swap conditions exists
         return (
-          this.exists(leftChildIndex) && this.heap[currentIndex] > this.heap[leftChildIndex]
-          || this.exists(rightChildIndex) && this.heap[currentIndex] > this.heap[rightChildIndex]
+            this.exists(leftChildIndex) && this.heap[currentIndex] > this.heap[leftChildIndex]
+            || this.exists(rightChildIndex) && this.heap[currentIndex] > this.heap[rightChildIndex]
         );
     }
 }
@@ -111,7 +111,4 @@ class PriorityQueue extends MinHeap {
     }
 }
 
-module.exports = {
-    MinHeap,
-    PriorityQueue
-};
+module.exports = MinHeap;
