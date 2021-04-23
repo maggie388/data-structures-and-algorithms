@@ -1,23 +1,12 @@
+const Heap = require('./heap');
 const { getParent, getLeft, getRight } = require('./heap-helpers');
 
-class MinHeap {
+class MinHeap extends Heap {
     constructor() {
-        // having index 0 as null will allow us 
-        // to always reference the min element at index 1
-        // and simplify the code
-        this.heap = [null];
-        this.size = 0;
+        super()
     }
 
-    add(value) {
-        // we always add a new value to the end of the array/heap
-        this.heap.push(value);
-        this.size++;
-        // this reshuffles the heap to maintain its constrains 
-        // children should be greater than or equal to their parent
-        this.bubbleUp();
-    }
-
+    // used after a value is added to maintian the contraints of the MinHeap
     bubbleUp() {
         let currentIndex = this.size;
         let parentIndex = getParent(currentIndex);
@@ -30,18 +19,7 @@ class MinHeap {
         }
     }
 
-    popMin() {
-        if (!this.size) return null;
-        // always swap first/min element with last element before removing it
-        this.swap(1, this.size);
-        const min = this.heap.pop();
-        this.size--;
-        // this reshuffles teh heap to maintain its constraints
-        // children should be greater than or equal to their parent
-        this.heapify();
-        return min;
-    }
-
+    // used after a value is removed to maintain the constraints of the MinHeap
     heapify() {
         // after swapping the last element with the first in popMin()
         // traverse the tree from the top down to restore the min-heap conditions
@@ -77,26 +55,12 @@ class MinHeap {
     }
 
     // HELPER METHODS
-    isEmpty() {
-        return this.size === 0;
-    }
-
-    exists(index) {
-        return index <= this.size;
-    }
-
     canSwap(currentIndex, leftChildIndex, rightChildIndex) {
         // Check that one of the possible swap conditions exists
         return (
           this.exists(leftChildIndex) && this.heap[currentIndex] > this.heap[leftChildIndex]
           || this.exists(rightChildIndex) && this.heap[currentIndex] > this.heap[rightChildIndex]
         );
-    }
-
-    swap(a, b) {
-        // this is destructuring assignment syntax
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
-        [this.heap[a], this.heap[b]] = [this.heap[b], this.heap[a]];
     }
 }
 
