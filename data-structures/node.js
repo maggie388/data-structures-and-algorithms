@@ -1,3 +1,5 @@
+// a node is the basis of many data structures
+// a linked list is made up of nodes that hold some data and point to the next node on the list
 class Node {
     constructor(data) {
         this.data = data;
@@ -17,6 +19,4 @@ class Node {
     }
 }
 
-module.exports = {
-    Node
-}
+module.exports = Node;
