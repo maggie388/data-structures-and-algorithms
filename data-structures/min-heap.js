@@ -1,7 +1,6 @@
 const { getParent, getLeft, getRight } = require('./heap-helpers');
 
 class MinHeap {
-    // keeping one element at the begging of the array that is null willfirst value is null so that 
     constructor() {
         // having index 0 as null will allow us 
         // to always reference the min element at index 1
