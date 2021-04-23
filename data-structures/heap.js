@@ -1,5 +1,3 @@
-const { getParent, getLeft, getRight } = require('./heap-helpers');
-
 // basic Heap that will be extended to create a MinHeap and MaxHeap
 class Heap {
     constructor() {
